@@ -1,21 +1,52 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChatButton } from "@/components/ui/chat-button";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { 
   Search, 
   Paperclip, 
   FileText, 
   Mic, 
   Send,
-  MicIcon
+  MicIcon,
+  ChevronDown,
+  Lightbulb,
+  Microscope
 } from "lucide-react";
 
 export const ChatInterface = () => {
   const [message, setMessage] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchMode, setSearchMode] = useState("search");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
+
+  const searchModes = {
+    search: {
+      label: "Search",
+      description: "Fast answers to everyday questions",
+      icon: Search,
+      badge: "PRO"
+    },
+    research: {
+      label: "Research", 
+      description: "Deep research on any topic",
+      icon: Microscope,
+      badge: "PRO"
+    },
+    labs: {
+      label: "Labs",
+      description: "Create projects from scratch", 
+      icon: Lightbulb,
+      badge: "PRO"
+    }
+  };
 
   // Auto-resize textarea
   useEffect(() => {
@@ -150,16 +181,44 @@ export const ChatInterface = () => {
         {/* Controls */}
         <div className="flex items-center justify-between px-5 pb-5">
           <div className="flex items-center gap-2">
-            <ChatButton
-              variant="search"
-              size="search"
-              onClick={handleWebSearch}
-              tooltip="Web Search"
-              className="gap-2"
-            >
-              <Search className="w-4 h-4" />
-              Search
-            </ChatButton>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-2 h-8 px-3 py-1.5 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold rounded-xl text-sm transition-colors">
+                  {React.createElement(searchModes[searchMode].icon, { className: "w-4 h-4" })}
+                  {searchModes[searchMode].label}
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-64">
+                {Object.entries(searchModes).map(([key, mode]) => (
+                  <DropdownMenuItem 
+                    key={key}
+                    onClick={() => setSearchMode(key)}
+                    className="flex items-start gap-3 p-3 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      {React.createElement(mode.icon, { className: "w-4 h-4 mt-0.5 flex-shrink-0" })}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-sm">{mode.label}</span>
+                          <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded-md font-medium">
+                            {mode.badge}
+                          </span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {mode.description}
+                        </p>
+                      </div>
+                    </div>
+                    {searchMode === key && (
+                      <div className="w-4 h-4 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                        <div className="w-2 h-2 bg-primary-foreground rounded-full" />
+                      </div>
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <div className="flex items-center gap-2">
