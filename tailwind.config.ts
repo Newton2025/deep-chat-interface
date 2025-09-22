@@ -57,6 +57,25 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        chat: {
+          container: "hsl(var(--chat-container))",
+          input: "hsl(var(--chat-input))",
+          placeholder: "hsl(var(--chat-placeholder))",
+          control: "hsl(var(--chat-control))",
+          "control-hover": "hsl(var(--chat-control-hover))",
+          "control-text": "hsl(var(--chat-control-text))",
+          "control-text-hover": "hsl(var(--chat-control-text-hover))",
+        },
+      },
+      backgroundImage: {
+        "gradient-primary": "var(--gradient-primary)",
+      },
+      boxShadow: {
+        elegant: "var(--shadow-elegant)",
+        soft: "var(--shadow-soft)",
+      },
+      transitionTimingFunction: {
+        smooth: "var(--transition-smooth)",
       },
       borderRadius: {
         lg: "var(--radius)",
